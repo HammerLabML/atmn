@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Created with Liquid Technologies Online Tools 1.0 (https://www.liquid-technologies.com) -->
+<!-- Modified manually -->
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="ScenarioCollection">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" name="Scenario">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="SensorConfigs">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element maxOccurs="unbounded" name="SensorConfig">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="PressureSensors">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element minOccurs="0" maxOccurs="unbounded" name="Sensor">
+                                  <xs:complexType>
+                                    <xs:attribute name="id" type="xs:string" use="required" />
+                                  </xs:complexType>
+                                </xs:element>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element name="FlowSensors">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element minOccurs="0" maxOccurs="unbounded" name="Sensor">
+                                  <xs:complexType>
+                                    <xs:attribute name="id" type="xs:string" use="required" />
+                                  </xs:complexType>
+                                </xs:element>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element name="DemandSensors">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element minOccurs="0" maxOccurs="unbounded" name="Sensor">
+                                  <xs:complexType>
+                                    <xs:attribute name="id" type="xs:string" use="required" />
+                                  </xs:complexType>
+                                </xs:element>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                        <xs:attribute name="name" type="xs:string" use="required" />
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="SensorfaultConfigs">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element maxOccurs="unbounded" name="SensorfaultConfig">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element minOccurs="0" maxOccurs="unbounded" name="Sensorfault">
+                            <xs:complexType>
+                              <xs:attribute name="partId" type="xs:string" use="required" />
+                              <xs:attribute name="sensorType" type="xs:string" use="required" />
+                              <xs:attribute name="start" type="xs:integer" use="required" />
+                              <xs:attribute name="end" type="xs:integer" use="required" />
+                              <xs:attribute name="faultType" type="xs:string" use="required" />
+                              <xs:attribute name="faultParam" type="xs:decimal" use="optional" />
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                        <xs:attribute name="name" type="xs:string" use="required" />
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="LeakConfigs">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element maxOccurs="unbounded" name="LeakConfig">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element minOccurs="0" maxOccurs="unbounded" name="Leak">
+                            <xs:complexType>
+                              <xs:attribute name="pipeId" type="xs:string" use="optional" />
+                              <xs:attribute name="type" type="xs:string" use="required" />
+                              <xs:attribute name="diameter" type="xs:decimal" use="required" />
+                              <xs:attribute name="start" type="xs:integer" use="required" />
+                              <xs:attribute name="end" type="xs:integer" use="required" />
+                              <xs:attribute name="peak" type="xs:integer" use="optional" />
+                              <xs:attribute name="nodeId" type="xs:string" use="optional" />
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                        <xs:attribute name="name" type="xs:string" use="required" />
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+            <xs:attribute name="name" type="xs:string" use="required" />
+            <xs:attribute name="network" type="xs:string" use="required" />
+            <xs:attribute name="iterations" type="xs:integer" use="required" />
+            <xs:attribute name="timeStep" type="xs:integer" use="required" />
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

@@ -1,0 +1,362 @@
+<ScenarioCollection>
+    <!-- One week of the Hanoi network in 30 min steps -->
+    <Scenario 
+        name="Hanoi_One_Week"
+        network="../networks/Hanoi.inp" 
+        iterations="336"
+        timeStep="1800">
+        <SensorConfigs>
+            <SensorConfig
+                name="Sensors1">
+                <PressureSensors>
+                    <Sensor id="3"/>
+                    <Sensor id="10"/>
+                    <Sensor id="20"/>
+                    <Sensor id="25"/>
+                </PressureSensors>
+                <FlowSensors>
+                    <Sensor id="1"/>
+                </FlowSensors>
+                <DemandSensors>
+                    <Sensor id="13"/>
+                    <Sensor id="22"/>
+                </DemandSensors>
+            </SensorConfig>
+            <SensorConfig
+                name="Sensors2">
+                <PressureSensors>
+                    <Sensor id="10"/>
+                    <Sensor id="20"/>
+                    <Sensor id="25"/>
+                </PressureSensors>
+                <FlowSensors>
+                    <Sensor id="1"/>
+                </FlowSensors>
+                <DemandSensors>
+                    <Sensor id="13"/>
+                    <Sensor id="22"/>
+                </DemandSensors>
+            </SensorConfig>
+            <SensorConfig
+                name="Sensors3">
+                <PressureSensors>
+                    <Sensor id="10"/>
+                    <Sensor id="16"/>
+                    <Sensor id="20"/>
+                </PressureSensors>
+                <FlowSensors>
+                    <Sensor id="1"/>
+                </FlowSensors>
+                <DemandSensors>
+                    <Sensor id="13"/>
+                    <Sensor id="22"/>
+                </DemandSensors>
+            </SensorConfig>
+        </SensorConfigs>
+        <SensorfaultConfigs>
+            <SensorfaultConfig
+                name="GT">
+                <!-- A ground truth sensorfault config-->
+            </SensorfaultConfig>
+            <SensorfaultConfig
+                name="JustPressure">
+                <!-- 10% too high reporting on pressure sensor 10 from day start of 4 until the middle of day 5 -->
+                <Sensorfault
+                    partId="10"
+                    sensorType="pressure"
+                    start="145"
+                    end="264"
+                    faultType="percentage"
+                    faultParam="1.1"/>
+            </SensorfaultConfig>
+            <SensorfaultConfig
+                name="JustFlow">
+                <!-- The flow sensor on pipe 1 is stuck at zero from start of day 3 until end of day 5 -->
+                <Sensorfault
+                    partId="1"
+                    sensorType="flow"
+                    start="97"
+                    end="240"
+                    faultType="stuckzero"/>
+            </SensorfaultConfig>
+            <SensorfaultConfig
+                name="PressureAndFlow">
+                <!-- 10% too high reporting on pressure sensor 10 from day start of 4 until the middle of day 5 -->
+                <Sensorfault
+                    partId="10"
+                    sensorType="pressure"
+                    start="145"
+                    end="264"
+                    faultType="percentage"
+                    faultParam="1.1"/>
+                <!-- The flow sensor on pipe 1 is stuck at zero from start of day 3 until end of day 5 -->
+                <Sensorfault
+                    partId="1"
+                    sensorType="flow"
+                    start="97"
+                    end="240"
+                    faultType="stuckzero"/>
+            </SensorfaultConfig>
+        </SensorfaultConfigs>
+        <LeakConfigs>
+            <LeakConfig
+                name="Baseline">
+                <!-- A baseline scenario with no leaks -->
+            </LeakConfig>
+            <!-- Leaks of different sizes in pipe 11 starting middle of day 1 until end of day 3 -->
+            <LeakConfig
+                name="Pipe11Abrupt05">
+                <Leak
+                    pipeId="11"
+                    type="abrupt"
+                    diameter="0.05"
+                    start="73"
+                    end="144"/>
+            </LeakConfig>
+            <LeakConfig
+                name="Pipe11Abrupt10">
+                <Leak
+                    pipeId="11"
+                    type="abrupt"
+                    diameter="0.1"
+                    start="73"
+                    end="144"/>
+            </LeakConfig>
+            <LeakConfig
+                name="Pipe11Abrupt25">
+                <Leak
+                    pipeId="11"
+                    type="abrupt"
+                    diameter="0.25"
+                    start="73"
+                    end="144"/>
+            </LeakConfig>
+            <LeakConfig
+                name="Pipe11Incipient05">
+                <Leak
+                    pipeId="11"
+                    type="incipient"
+                    diameter="0.05"
+                    start="73"
+                    peak="96"
+                    end="144"/>
+            </LeakConfig>
+            <LeakConfig
+                name="Pipe11Incipient10">
+                <Leak
+                    pipeId="11"
+                    type="incipient"
+                    diameter="0.1"
+                    start="73"
+                    peak="96"
+                    end="144"/>
+            </LeakConfig>
+            <LeakConfig
+                name="Pipe11Incipient25">
+                <Leak
+                    pipeId="11"
+                    type="incipient"
+                    diameter="0.25"
+                    start="73"
+                    peak="96"
+                    end="144"/>
+            </LeakConfig>
+            <!-- Of course, multiple leaks are possible within a leak config -->
+            <LeakConfig
+                name="MultipleLeaks">
+                <Leak
+                    pipeId="11"
+                    type="abrupt"
+                    diameter="0.1"
+                    start="73"
+                    end="144"/>
+                <Leak
+                    pipeId="1"
+                    type="abrupt"
+                    diameter="0.2"
+                    start="169"
+                    end="264"/>
+            </LeakConfig>
+        </LeakConfigs>
+    </Scenario>
+    <!-- A second scenario using the Hanoi network, but this time we simulate for a whole month (30 days) -->
+    <Scenario 
+        name="Hanoi_One_Month"
+        network="../networks/Hanoi.inp" 
+        iterations="1440"
+        timeStep="1800">
+        <SensorConfigs>
+            <SensorConfig
+                name="Sensors1">
+                <PressureSensors>
+                    <Sensor id="3"/>
+                    <Sensor id="10"/>
+                    <Sensor id="20"/>
+                    <Sensor id="25"/>
+                </PressureSensors>
+                <FlowSensors>
+                    <Sensor id="1"/>
+                </FlowSensors>
+                <DemandSensors>
+                    <Sensor id="13"/>
+                    <Sensor id="22"/>
+                </DemandSensors>
+            </SensorConfig>
+            <SensorConfig
+                name="Sensors2">
+                <PressureSensors>
+                    <Sensor id="10"/>
+                    <Sensor id="20"/>
+                    <Sensor id="25"/>
+                </PressureSensors>
+                <FlowSensors>
+                    <Sensor id="1"/>
+                </FlowSensors>
+                <DemandSensors>
+                    <Sensor id="13"/>
+                    <Sensor id="22"/>
+                </DemandSensors>
+            </SensorConfig>
+            <SensorConfig
+                name="Sensors3">
+                <PressureSensors>
+                    <Sensor id="10"/>
+                    <Sensor id="16"/>
+                    <Sensor id="20"/>
+                </PressureSensors>
+                <FlowSensors>
+                    <Sensor id="1"/>
+                </FlowSensors>
+                <DemandSensors>
+                    <Sensor id="13"/>
+                    <Sensor id="22"/>
+                </DemandSensors>
+            </SensorConfig>
+        </SensorConfigs>
+        <SensorfaultConfigs>
+            <SensorfaultConfig
+                name="GT">
+                <!-- A ground truth sensorfault config-->
+            </SensorfaultConfig>
+            <SensorfaultConfig
+                name="JustPressure">
+                <!-- 10% too high reporting on pressure sensor 10 from day start of 4 until the middle of day 5 -->
+                <Sensorfault
+                    partId="10"
+                    sensorType="pressure"
+                    start="145"
+                    end="264"
+                    faultType="percentage"
+                    faultParam="1.1"/>
+            </SensorfaultConfig>
+            <SensorfaultConfig
+                name="JustFlow">
+                <!-- The flow sensor on pipe 1 is stuck at zero from start of day 3 until end of day 5 -->
+                <Sensorfault
+                    partId="1"
+                    sensorType="flow"
+                    start="97"
+                    end="240"
+                    faultType="stuckzero"/>
+            </SensorfaultConfig>
+            <SensorfaultConfig
+                name="PressureAndFlow">
+                <!-- 10% too high reporting on pressure sensor 10 from day start of 4 until the middle of day 5 -->
+                <Sensorfault
+                    partId="10"
+                    sensorType="pressure"
+                    start="145"
+                    end="264"
+                    faultType="percentage"
+                    faultParam="1.1"/>
+                <!-- The flow sensor on pipe 1 is stuck at zero from start of day 3 until end of day 5 -->
+                <Sensorfault
+                    partId="1"
+                    sensorType="flow"
+                    start="97"
+                    end="240"
+                    faultType="stuckzero"/>
+            </SensorfaultConfig>
+        </SensorfaultConfigs>
+        <LeakConfigs>
+            <LeakConfig
+                name="Baseline">
+                <!-- A baseline scenario with no leaks -->
+            </LeakConfig>
+            <!-- Leaks of different sizes in pipe 11 starting middle of day 1 until end of day 3 -->
+            <LeakConfig
+                name="Pipe11Abrupt05">
+                <Leak
+                    pipeId="11"
+                    type="abrupt"
+                    diameter="0.05"
+                    start="73"
+                    end="144"/>
+            </LeakConfig>
+            <LeakConfig
+                name="Pipe11Abrupt10">
+                <Leak
+                    pipeId="11"
+                    type="abrupt"
+                    diameter="0.1"
+                    start="73"
+                    end="144"/>
+            </LeakConfig>
+            <LeakConfig
+                name="Pipe11Abrupt25">
+                <Leak
+                    pipeId="11"
+                    type="abrupt"
+                    diameter="0.25"
+                    start="73"
+                    end="144"/>
+            </LeakConfig>
+            <LeakConfig
+                name="Pipe11Incipient05">
+                <Leak
+                    pipeId="11"
+                    type="incipient"
+                    diameter="0.05"
+                    start="73"
+                    peak="96"
+                    end="144"/>
+            </LeakConfig>
+            <LeakConfig
+                name="Pipe11Incipient10">
+                <Leak
+                    pipeId="11"
+                    type="incipient"
+                    diameter="0.1"
+                    start="73"
+                    peak="96"
+                    end="144"/>
+            </LeakConfig>
+            <LeakConfig
+                name="Pipe11Incipient25">
+                <Leak
+                    pipeId="11"
+                    type="incipient"
+                    diameter="0.25"
+                    start="73"
+                    peak="96"
+                    end="144"/>
+            </LeakConfig>
+            <!-- Of course, multiple leaks are possible within a leak config -->
+            <LeakConfig
+                name="MultipleLeaks">
+                <Leak
+                    pipeId="11"
+                    type="abrupt"
+                    diameter="0.1"
+                    start="73"
+                    end="144"/>
+                <Leak
+                    pipeId="1"
+                    type="abrupt"
+                    diameter="0.2"
+                    start="169"
+                    end="264"/>
+            </LeakConfig>
+        </LeakConfigs>
+    </Scenario>
+</ScenarioCollection>

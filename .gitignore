@@ -1,0 +1,12 @@
+# Built distribution
+dist
+
+# Exclude generated files
+*.pyc
+*.xlsx
+*.html
+examples/.ipynb_checkpoints/*
+
+# Exclude the scenario collection in examples, but include the xml configuration
+examples/my_collection/*
+!examples/my_collection/config.xml

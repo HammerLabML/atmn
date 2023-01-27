@@ -1,0 +1,31 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "atmn"
+version = "1.0.0"
+authors = [
+  { name="Jonas Vaquet"},
+  { name="Kathrin Lammers"},
+  { name="Valerie Vaquet"},
+  { name="André Artelt"}
+]
+description = "Automation Toolbox for Machine learning in water Networks"
+readme = "pypi.md"
+requires-python = ">=3.8"
+dependencies = ["numpy", "pandas", "wntr", "lxml", "alive-progress", "psutil", "openpyxl", "plotly"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Repository" = "https://github.com/HammerLabML/atmn"
+
+[project.scripts]
+atmn = "atmn.__main__:main"
+atmn-generate = "atmn.ScenarioGenerator:main"
+atmn-export = "atmn.ScenarioExporter:main"
+atmn-visualize = "atmn.ScenarioVisualizer:main"
