@@ -23,5 +23,8 @@ There is separate documentation on different topics concerning the toolbox:
 
 ## Version History
 
+### 1.1
+- Added support for saving measurements with binary datatypes
+
 ### 1.0
 - Initial public release
