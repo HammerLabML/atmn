@@ -16,7 +16,7 @@ verbose = 0
 
 class ScenarioGenerator:
 
-    def __init__(self, config_file, collection_path=None, force_regenerate=False, selection=None, n_threads=1, max_mem=None):
+    def __init__(self, config_file, collection_path=None, force_regenerate=False, selection=None, n_threads=1, max_mem=None, dtype=None):
         """
         Scenario Generator Constructor.
 
@@ -26,6 +26,7 @@ class ScenarioGenerator:
         :param selection: Selection which scenarios to force, re-generate (Format: List of "SCENARIO.LEAK_CONFIG")
         :param n_threads: Number of threads to use, for single threaded use None
         :param max_mem: Maximum memory to use in parallel mode
+        :param dtype: Datatype to save the measurement values with, either a numpy type or "csv"
         """
 
         # Check if config file exists
@@ -41,6 +42,7 @@ class ScenarioGenerator:
         self.collection_path = os.path.abspath(collection_path) if collection_path else self.base_path
         self.n_threads = n_threads
         self.max_mem = max_mem
+        self.dtype = dtype
 
         # Read and validate the config file
         self.read_config()
@@ -229,7 +231,7 @@ class ScenarioGenerator:
 
                         # Append simulation job to job list
                         if verbose: print(f'Adding: {scenario_name}.{leak_config_name}')
-                        self.job_list.append(SimulationJob(scenario_dict, leaks, leak_config_name, self.sensor_masks[scenario_name], measurements_path, estimated_memory))
+                        self.job_list.append(SimulationJob(scenario_dict, leaks, leak_config_name, self.sensor_masks[scenario_name], measurements_path, estimated_memory, self.dtype))
         
         # Clamp number of threads according to memory constraints
         practical_n_threads = int(self.available_memory // lowest_estimated_memory)
@@ -395,7 +397,7 @@ class ScenarioGenerator:
 
 class SimulationJob:
 
-    def __init__(self, scenario_config, leaks, leak_config_name, sensor_mask, results_path, memory_estimate):
+    def __init__(self, scenario_config, leaks, leak_config_name, sensor_mask, results_path, memory_estimate, dtype):
         """
         Simulation Job constructor.
 
@@ -405,6 +407,7 @@ class SimulationJob:
         :param sensor_mask: A mask to determine, which sensors to save an which not
         :param results_path: Path where to save the simulation results
         :param memory_estimate: Estimation of this jobs maximum memory requirements
+        :param dtype: Datatype to save the measurement values with, either a numpy type or "csv"
         """
 
         # Save attributes
@@ -414,6 +417,7 @@ class SimulationJob:
         self.sensor_mask = sensor_mask
         self.results_path = results_path
         self.memory_estimate = memory_estimate
+        self.dtype = dtype
 
     def init(self):
         '''
@@ -582,9 +586,15 @@ class SimulationJob:
             os.makedirs(self.results_path)
 
         # Save dataframes
-        pressure.to_csv(os.path.join(self.results_path, 'pressure.csv'))
-        flow.to_csv(os.path.join(self.results_path, 'flow.csv'))
-        demand.to_csv(os.path.join(self.results_path, 'demand.csv'))
+        if self.dtype == 'csv':
+            pressure.to_csv(os.path.join(self.results_path, 'pressure.csv'))
+            flow.to_csv(os.path.join(self.results_path, 'flow.csv'))
+            demand.to_csv(os.path.join(self.results_path, 'demand.csv'))
+        else:
+            pressure.astype(self.dtype).to_pickle(os.path.join(self.results_path, 'pressure.pkl'))
+            flow.astype(self.dtype).to_pickle(os.path.join(self.results_path, 'flow.pkl'))
+            demand.astype(self.dtype).to_pickle(os.path.join(self.results_path, 'demand.pkl'))
+            
         if verbose > 1: print(f'Done saving results for {self.scenario_config["name"]}.{self.leak_config_name}', flush=True)
 
 
@@ -686,6 +696,7 @@ def run(args):
     collection_path = args.collection_path
     force = args.force_regenerate
     selection = args.selection
+    dtype = args.dtype
 
     # If thread number is given, us it. Otherwise use 1 if not parallel and os.cpu_count() if parallel
     n_threads = args.threads if args.threads is not None \
@@ -695,8 +706,14 @@ def run(args):
     # Make sure to convert from MB to kB
     memory = args.max_memory * 1000 if args.max_memory is not None else psutil.virtual_memory().available * 0.99 // 1000
 
+    # Check datatype validity and convert to datatype string
+    if dtype not in ['8', '16', '32', '64', 'csv']:
+        print(f'[WARNING] Unknown datatype "{dtype}", reverting to float16.')
+    elif dtype != 'csv':
+        dtype = f'float{dtype}'
+
     # Create Generator and run generations
-    generator = ScenarioGenerator(config, collection_path=collection_path, force_regenerate=force, selection=selection, n_threads=n_threads, max_mem=memory)
+    generator = ScenarioGenerator(config, collection_path=collection_path, force_regenerate=force, selection=selection, n_threads=n_threads, max_mem=memory, dtype=dtype)
     generator.run()
 
 def configure_parser(parser):
@@ -715,6 +732,7 @@ def configure_parser(parser):
     parser.add_argument('-t', '--threads', action='store', type=int, help='Specify a number of threads for parallelized simulation (Overwrites "-p")')
     parser.add_argument('-m', '--max-memory', action='store', type=int, help='Maximum memory this generator should consume in MB')
     parser.add_argument('-v', '--verbose', action='count', default=0, help='Enable verbose output, -vv for extra verbose')
+    parser.add_argument('-d', '--dtype', action='store', type=str, default='16', help='Choose datatype to store measurements as. Either 16, 32 or 64 for the corresponding floating point precision or "csv" to save in csv format. Default: 16')
 
 def main():
     """
