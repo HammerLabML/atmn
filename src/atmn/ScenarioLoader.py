@@ -183,12 +183,24 @@ class Scenario:
             for sensor in config:
                 mask[config.tag].append(sensor.attrib['id'])
         
-        # Read Sensor data from simulation
-        data = {
-            'demand': pd.read_csv(os.path.join(self.path, 'measurements', leak_config, 'demand.csv'), index_col='time').loc[:,mask['DemandSensors']],
-            'flow': pd.read_csv(os.path.join(self.path, 'measurements', leak_config, 'flow.csv'), index_col='time').loc[:,mask['FlowSensors']],
-            'pressure': pd.read_csv(os.path.join(self.path, 'measurements', leak_config, 'pressure.csv'), index_col='time').loc[:,mask['PressureSensors']]
-        }
+        # Create path for measurements
+        measurements_path = os.path.join(self.path, 'measurements', leak_config)
+
+        # Check, if data is present as csv, alternatively assume pkl.
+        if os.path.exists(os.path.join(measurements_path, 'demand.csv')):
+            # Read measurements from csv
+            data = {
+                'demand': pd.read_csv(os.path.join(measurements_path, 'demand.csv'), index_col='time').loc[:,mask['DemandSensors']],
+                'flow': pd.read_csv(os.path.join(measurements_path, 'flow.csv'), index_col='time').loc[:,mask['FlowSensors']],
+                'pressure': pd.read_csv(os.path.join(measurements_path, 'pressure.csv'), index_col='time').loc[:,mask['PressureSensors']]
+            }
+        else:
+            # Read measurements from pkl
+            data = {
+                'demand': pd.read_pickle(os.path.join(measurements_path, 'demand.pkl')).loc[:,mask['DemandSensors']],
+                'flow': pd.read_pickle(os.path.join(measurements_path, 'flow.pkl')).loc[:,mask['FlowSensors']],
+                'pressure': pd.read_pickle(os.path.join(measurements_path, 'pressure.pkl')).loc[:,mask['PressureSensors']]
+            }
 
         # Read and apply Sensorfault config
         sensorfault_config = lxml.etree.parse(os.path.join(self.path, 'sensorfaults', f'{sensorfault_config_name}.xml')).getroot()
