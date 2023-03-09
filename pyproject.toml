@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "atmn"
-version = "1.0.0"
+version = "1.1.0"
 authors = [
   { name="Jonas Vaquet"},
   { name="Kathrin Lammers"},
