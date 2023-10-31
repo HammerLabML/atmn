@@ -7,6 +7,8 @@ If you want a hands-on tour of all features this toolbox has to offer, have a lo
 - `$ jupyter notebook`
 - Open the `Quickstart` notebook and it will explain everything you need to know.
 
+For implementing atmn, we used the code published for the BattLeDIM 2020 challenge (http://www.ccwi-wdsa2020.com/) as a starting point, please refer to https://github.com/KIOS-Research/BattLeDIM. Besides, to realize the simulation of sensor faults, we adapted the Matlab implementation by https://github.com/eldemet/sensorfaultmodels. We would like to thank our colleagues at KIOS Center of Excellence, University of Cyprus, Cyprus, in particular Stelios G. Vrachimis and Demetrios G. Eliades for providing crucial domain knowledge for developing the atmn package.
+
 ## Documentation
 There is separate documentation on different topics concerning the toolbox:
 
@@ -28,3 +30,8 @@ There is separate documentation on different topics concerning the toolbox:
 
 ### 1.0
 - Initial public release
+
+## Contributors
+Jonas Vaquet, Kathrin Lammers, André Artelt, Fabian Hinder, Valerie Vaquet
+
+Bielefeld University, Germany
